@@ -2,6 +2,8 @@ import json
 import random
 import os
 import copy
+from operator import index
+
 import requests
 from datetime import datetime
 from datetime import date
@@ -55,7 +57,7 @@ def get2()->dict:
 
 
 
-def get3()->dict:
+def get3():
     """
     Decoy de empresas
     utilizado API constante sem updates
@@ -75,14 +77,19 @@ def getvagas()->list:
     """
     if os.path.exists('empresas.json.'):
         with open('empresas.json', 'r') as f:
-            if not f.read()=='':
-               dicto = json.load(f)
+            dicto = json.load(f)
     else:
         dicto = []
     return dicto
 
 
 def act1() ->None:
+    """
+    Agendamento de compromissos
+    recebe nenhum valor como parâmetro e retorna nada
+    tudo é feito dentro da função
+    :return:
+    """
     dicto = get1()
     try:
         categ = int(input('De que categoria o seu agendamento é?\n1-Reunião\n2-Pessoal\n3-Tarefa\nCaso nenhuma, apenas tecle qualquer coisa\n'))
@@ -264,6 +271,12 @@ def act1() ->None:
     volta()
 
 def act2() ->None:
+    """
+    Exclusão de agendamentos
+    recebe nenhum valor como parâmetro e retorna nada
+    tudo é feito dentro da função
+    :return:
+    """
     dicto = get1()
     exists = False
 
@@ -308,6 +321,12 @@ def act2() ->None:
     volta()
 
 def act3() ->None:
+    """
+    Edita agendamentos
+    recebe nenhum valor como parâmetro e retorna nada
+    tudo é feito dentro da função
+    :return:
+    """
     dicto = get1()
     try:
         categ = int(input('Diga a categoria do agendamento que você deseja editar\n1-Reuniões\n2-Pessoais\n3-Tarefas\n'))
@@ -661,6 +680,13 @@ def act3() ->None:
     volta()
 
 def act4() ->None:
+    """
+    Verifica agendamentos
+    pode ver todos os agendamento ou um em específico
+    recebe nenhum valor como parâmetro e retorna nada
+    tudo é feito dentro da função
+    :return:
+    """
     dicto = get1()
     exists = False
 
@@ -729,6 +755,9 @@ def act5() ->None:
     """
     Buscar por informações de emprego
     dentro da API do LinkedIN
+    Caso a API esteja indísponivel
+    retorna um decoy em guardado em outro link
+    Também salva algumas vagas se o user quiser
     :return:
     """
     # res = get2()
@@ -739,14 +768,14 @@ def act5() ->None:
     contador = 0
     for i in dicto:
         contador += 1
-        print(f'Número: {contador}\nQuando foi postado: {i['date_posted']}\nVaga: {i['title']}\nValidade: {i['date_validthrough']}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
+        print(f'Número: {contador}\nQuando foi postado: {str(i['date_posted'])[:10]}\nVaga: {i['title']}\nValidade: {str(i['date_validthrough'])[:10]}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
     print('Caso queira mais detalhes, tente entra nos links do linkedin da empresa ou no link da vaga.')
     while True:
-        try:
-            a = int(input('Deseja arquivar uma vaga?\nSe sim, dê coloque o número da empresa (o que fica em bem no inicio das informações sobre a empre e dê enter)\n\nCaso não, digite "SAIR".\n'))
-            if a == 'SAIR':
+        try: #date_valid
+            a = int(input('Deseja arquivar uma vaga?\nSe sim, dê coloque o número da empresa (o que fica em bem no inicio das informações sobre a empre e dê enter)\n\n----Caso não, digite "9999" para sair.\n-> '))
+            if a == 9999:
                 break
-            elif a<=contador or a>=1:
+            elif contador >= a >= 1:
                 a=a-1
                 salvar.append(dicto[a])
 
@@ -761,8 +790,13 @@ def act5() ->None:
             json.dump(salvar, f, indent=3)
     volta() #
 
-def act6():
-
+def act6() ->None:
+    """
+    Mosta as vagas salvas
+    pode mostrar todas as vagas
+    ou pode mostrar só uma vaga
+    :return:
+    """
     dicto = getvagas()
     veri = input('Se deseja ver todas as empresas, apenas der enter\nCaso queira ver apenas uma, punxando-a pelo ID, digite "PUXAR".')
     if veri.upper()=='PUXAR':
@@ -772,21 +806,20 @@ def act6():
             if i['id'] == iden:
                 exists = True
                 vaga = i
+                break
         if not exists:
             print('Esse ID não está catalogado\nTem certeza que é o ID correto ou se ele ao menos existe?\n')
         else:
             print(
-                f'Quando foi postado: {vaga['date_posted']}\nVaga: {vaga['title']}\nValidade: {vaga['date_validthrough']}\nEmpresa: {vaga['organization']}\nLink da empresa: {vaga['organization_url']}\nTipos de vaga: {vaga['employment_type']}\nLink da vaga: {vaga['url']}\nSenioridade: {vaga['seniority']}\nEspecialidades da empresa: {vaga['linkedin_org_specialties']}\nSlogan da empresa: {vaga['linkedin_org_slogan']}\n')
+                f'ID da vaga: {vaga['id']}\nQuando foi postado: {vaga['date_posted']}\nVaga: {vaga['title']}\nValidade: {vaga['date_validthrough']}\nEmpresa: {vaga['organization']}\nLink da empresa: {vaga['organization_url']}\nTipos de vaga: {vaga['employment_type']}\nLink da vaga: {vaga['url']}\nSenioridade: {vaga['seniority']}\nEspecialidades da empresa: {vaga['linkedin_org_specialties']}\nSlogan da empresa: {vaga['linkedin_org_slogan']}\n')
     else:
         for i in dicto:
             print(
-                f'Quando foi postado: {i['date_posted']}\nVaga: {i['title']}\nValidade: {i['date_validthrough']}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
+                f'ID da vaga: {i['id']}\nQuando foi postado: {i['date_posted']}\nVaga: {i['title']}\nValidade: {i['date_validthrough']}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
 
     volta()
 
-
-
-def act7():
+def act7() ->None:
     dicto = getvagas()
     exists = False
     iden = input('Qual é o ID da vaga?\n')
@@ -799,16 +832,24 @@ def act7():
     else:
         print(f'Quando foi postado: {vaga['date_posted']}\nVaga: {vaga['title']}\nValidade: {vaga['date_validthrough']}\nEmpresa: {vaga['organization']}\nLink da empresa: {vaga['organization_url']}\nTipos de vaga: {vaga['employment_type']}\nLink da vaga: {vaga['url']}\nSenioridade: {vaga['seniority']}\nEspecialidades da empresa: {vaga['linkedin_org_specialties']}\nSlogan da empresa: {vaga['linkedin_org_slogan']}\n')
         deleta = input('VocÊ tem certeza que quer deletar essa vaga?\nSe sim, digite "DELETAR".\n')
-        if deleta == 'DELETAR':
+        if deleta.upper() == 'DELETAR':
             dicto.remove(vaga)
             print('Vaga deletada com sucesso!')
-            with open('empresas.json', 'r') as f:
+            with open('empresas.json', 'w') as f:
                 json.dump(dicto, f, indent=3)
-
+        else:
+            print('Operação cancelada.')
         volta()
 
 
 def verificar() ->None:
+    """
+    Função utilizada para verificar
+    os compromissos com data limite
+    para o dia atual
+    :return: 
+    """
+    
     dicto = get1()
     hojerp=[]
     hojet=[]
