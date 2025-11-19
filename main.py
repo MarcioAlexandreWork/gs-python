@@ -1,9 +1,6 @@
 import json
 import random
 import os
-import copy
-from operator import index
-
 import requests
 from datetime import datetime
 from datetime import date
@@ -36,25 +33,23 @@ def get1()->dict:
     return dicto
 
 
+# Não consegui encontrar uma tipagem apropriada às funções get2 e get3
+def get2():
+    """
+    API do linkedin para trabalhos
+    utilizar apenas quando outilizar o código de forma oficial
+    tentar não usar em testes para não esgotar o limite de gets
+    :return:
+    """
+    url = "https://linkedin-job-search-api.p.rapidapi.com/active-jb-24h"
+    querystring = {"limit": "10", "offset": "0", "title_filter": "\"Data Engineer\"",
+                   "location_filter": "\"United States\" OR \"United Kingdom\"", "description_type": "text"}
+    headers = {
+        "x-rapidapi-key": "ea8d1789cemsh1b0e493bbf3e38cp116f87jsncbd8e51146a2",
+        "x-rapidapi-host": "linkedin-job-search-api.p.rapidapi.com"
+    }
 
-def get2()->dict:
-    pass
-#     """
-#     API do linkedin para trabalhos
-#     utilizar apenas quando outilizar o código de forma oficial
-#     tentar não usar em testes para não esgotar o limite de gets
-#     :return:
-#     """
-#     url = "https://linkedin-job-search-api.p.rapidapi.com/active-jb-24h"
-#     querystring = {"limit": "10", "offset": "0", "title_filter": "\"Data Engineer\"",
-#                    "location_filter": "\"United States\" OR \"United Kingdom\"", "description_type": "text"}
-#     headers = {
-#         "x-rapidapi-key": "ea8d1789cemsh1b0e493bbf3e38cp116f87jsncbd8e51146a2",
-#         "x-rapidapi-host": "linkedin-job-search-api.p.rapidapi.com"
-#     }
-#     return requests.get(url, headers=headers, params=querystring)
-
-
+    return requests.get(url, headers=headers, params=querystring)
 
 
 def get3():
@@ -83,6 +78,8 @@ def getvagas()->list:
     return dicto
 
 
+
+
 def act1() ->None:
     """
     Agendamento de compromissos
@@ -106,7 +103,7 @@ def act1() ->None:
     if categ=='reunioes' or categ=='pessoais': # Reuniões e pessoais tem estruturas identicas, a unica coisa que muda é a categoria
                                                # Isso é feito apenas pela organização, já que os arquivos JSON são um só
         try:
-            tipo = int(input("Qual é o tipo de reunião?\n1-Online\n2-Presencial"))
+            tipo = int(input("Qual é o tipo de reunião?\n1-Online\n2-Presencial\n--> "))
         except ValueError: #Tornando os valores nulos para que o usuário não tenha que fazer toda a operação novamente
             tipo = None
             link = None
@@ -128,11 +125,11 @@ def act1() ->None:
         assunto = input('Qual é o assunto da reunião?')
         try:
             corrigir = False
-            DD = int(input('Qual o dia da reunião?\nEX: 17\n'))
-            MM = int(input('Qual o mês da reuniao?\nEX: 11\n'))
-            AAAA = int(input('Qual é o ano da reuniao?\nEX: 2025\n'))
-            horas = int(input('Qual é a hora da ruenião?\nXX:MM\n'))
-            min = int(input('Quais são os minutos da reunião?\nHH:XX\n'))
+            DD = int(input('Qual o dia da reunião?\nEX: 17\n\n--> '))
+            MM = int(input('Qual o mês da reuniao?\nEX: 11\n--> '))
+            AAAA = int(input('Qual é o ano da reuniao?\nEX: 2025\n\n--> '))
+            horas = int(input('Qual é a hora da ruenião?\nXX:MM\n\n--> '))
+            min = int(input('Quais são os minutos da reunião?\nHH:XX\n\n--> '))
 
             if DD<=9: #Operações no
                 DD = "0"+str(DD)
@@ -158,7 +155,7 @@ def act1() ->None:
                 ocorreu = False
         else:
             ocorreu = True
-        a = input(f'Categoria: {categ}\nTipo: {tipo}\nAssunto: {assunto}\nLink: {link}\nLocal: {local}\nData: {data}\nHorario: {horario}\n\nAs informações estão corretas?\nCaso não, digite "SAIR" para voltar o menu principal\n')
+        a = input(f'Categoria: {categ}\nTipo: {tipo}\nAssunto: {assunto}\nLink: {link}\nLocal: {local}\nData: {data}\nHorario: {horario}\n\nAs informações estão corretas?\nCaso não, digite "SAIR" para voltar o menu principal\n\n--> ')
         if not a.upper() == 'SAIR':
             if not dicto['compromissos'][categ]==[]:
                 while True:
@@ -194,15 +191,15 @@ def act1() ->None:
                 json.dump(dicto, f, indent=3)
 
     elif categ=='tarefas':
-        tarefa = input('Qual é a tarefa a ser realizada?')
-        observacoes = input('Alguma observação sobre a tarefa a ser realizada?')
-        objetivo_atual = input('Algum objetivo atual?\nEX: Colocar comentários // Arrumar erros // Adicionar uma terceira função\n')
+        tarefa = input('Qual é a tarefa a ser realizada?\n--> ')
+        observacoes = input('Alguma observação sobre a tarefa a ser realizada?\n--> ')
+        objetivo_atual = input('Algum objetivo atual?\nEX: Colocar comentários // Arrumar erros // Adicionar uma terceira função\n\n--> ')
         try:
-            DD = int(input('Até que dia você tem que fazer essa tarefa?\nEX: 17\n'))
+            DD = int(input('Até que dia você tem que fazer essa tarefa?\nEX: 17\n\n--> '))
             MM = int(input('Até que mês você tem que fazer essa tarefa?\nEX: 11\n'))
-            AAAA = int(input('Até que ano você tem que fazer essa tarefa?\nEX: 2025\n'))
-            horas = int(input('Até que horas você tem que fazer essa tarefa?\nXX:MM\n'))
-            min = int(input('E quais são os minutos limite da tarefa?\nHH:XX\n'))
+            AAAA = int(input('Até que ano você tem que fazer essa tarefa?\nEX: 2025\n\n--> '))
+            horas = int(input('Até que horas você tem que fazer essa tarefa?\nXX:MM\n\n--> '))
+            min = int(input('E quais são os minutos limite da tarefa?\nHH:XX\n\n--> '))
 
             if DD<=9: #Operações no
                 DD = "0"+str(DD)
@@ -233,7 +230,7 @@ def act1() ->None:
             ocorreu = True
         else:
             ocorreu = False
-        a = input(f'Categoria: {categ}\nTarefa: {tarefa}\nObservações: {observacoes}\nObjetivo atual: {objetivo_atual}\nData limite: {deadline}\nTempo limite: {horario}\n\nAs informações estão corretas?\nCaso não, digite "SAIR" para voltar o menu principal\n')
+        a = input(f'Categoria: {categ}\nTarefa: {tarefa}\nObservações: {observacoes}\nObjetivo atual: {objetivo_atual}\nData limite: {deadline}\nTempo limite: {horario}\n\nAs informações estão corretas?\nCaso não, digite "SAIR" para voltar o menu principal\n\n--> ')
         if not a.upper() == 'SAIR':
             if not dicto['compromissos']['tarefas']==[]:
                 while True:
@@ -281,8 +278,8 @@ def act2() ->None:
     exists = False
 
     try:
-        categ = int(input('Qual é a categoria do agendamento que você deseja deletar?\n1 - Reunioes\n2 - Pessoal\n3 - Tarefas\n'))
-        id = int(input('Qual é o ID do compromisso que deseja deletar\n'))
+        categ = int(input('Qual é a categoria do agendamento que você deseja deletar?\n1 - Reunioes\n2 - Pessoal\n3 - Tarefas\n\n--> '))
+        id = int(input('Qual é o ID do compromisso que deseja deletar\n\n--> '))
         if categ == 1:
             categ = 'reunioes'
         elif categ == 2:
@@ -308,7 +305,7 @@ def act2() ->None:
                     print(
                         f'Categoria: {categ}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
 
-                deletar = input('Você tem CERTEZA que quer deletar esse agendamento? Se sim, digite "DELETAR"\n')
+                deletar = input('Você tem CERTEZA que quer deletar esse agendamento? Se sim, digite "DELETAR"\n\n--> ')
                 if deletar.upper() == 'DELETAR':
                     dicto['compromissos'][categ].remove(agendamento)
                     print('Deletado.')
@@ -329,7 +326,7 @@ def act3() ->None:
     """
     dicto = get1()
     try:
-        categ = int(input('Diga a categoria do agendamento que você deseja editar\n1-Reuniões\n2-Pessoais\n3-Tarefas\n'))
+        categ = int(input('Diga a categoria do agendamento que você deseja editar\n1-Reuniões\n2-Pessoais\n3-Tarefas\n\n--> '))
     except ValueError:
         categ = 0
         print('Número inteiros apenas')
@@ -343,7 +340,7 @@ def act3() ->None:
         print('Essa categoria não existe')
 
     if categ == 'reunioes' or categ == 'pessoais' or categ == 'tarefas':
-        identi = input('Qual é o ID do agendamento?\nVerifique na opção 5 do menu caso não saiba e busque pelo ID\n')
+        identi = input('Qual é o ID do agendamento?\nVerifique na opção 5 do menu caso não saiba e busque pelo ID\n\n--> ')
         exists = False
         ind = 0
         for i in dicto['compromissos'][categ]:
@@ -360,10 +357,10 @@ def act3() ->None:
             if categ=='reunioes':
                 while True:
                     print(f'Categoria: {categ}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
-                    editar = input('\nQue informação você quer editar?\n1-Tipo\n2-Assunto\n3-Link\n4-Local\n5-Data\n6-Horario\n7-Ocorrência\n\nSe quer parar de editar, tecle "SAIR" e dê enter')
+                    editar = input('\nQue informação você quer editar?\n1-Tipo\n2-Assunto\n3-Link\n4-Local\n5-Data\n6-Horario\n7-Ocorrência\n\nSe quer parar de editar, tecle "SAIR" e dê enter\n--> ')
                     if editar=='1':
                         print(f'Tipo atual: {agendamento['tipo']}')
-                        a = input('Qual o tipo novo?\n1-Online\n2-Presencial\n')
+                        a = input('Qual o tipo novo?\n1-Online\n2-Presencial\n\n--> ')
                         if a=='1':
                             agendamento['tipo'] = 'online'
                         elif a=='2':
@@ -375,7 +372,7 @@ def act3() ->None:
 
                     elif editar=='2':
                         print(f'Assunto atual: {agendamento['assunto']}')
-                        a = input('Qual o novo assunto?')
+                        a = input('Qual o novo assunto?\n--> ')
                         agendamento['assunto'] = a
                         if not agendamento['tipo'] == antigo['tipo']:
                             agendamento['ultima_edicao']['ultimo_item_modificado']="Assunto"
@@ -383,7 +380,7 @@ def act3() ->None:
                             print('Nada foi editado')
                     elif editar=='3':
                         print(f'Link atual: {agendamento['link']}')
-                        a = input('Qual o novo link?\n(Coloque "None" no caso queira deixar vazio\n)')
+                        a = input('Qual o novo link?\n(Coloque "None" no caso queira deixar vazio\n\n--> )')
                         if a.upper()=='NONE':
                             a=None
                         agendamento['link'] = a
@@ -393,7 +390,7 @@ def act3() ->None:
                             print('Nada foi editado')
                     elif editar=='4':
                         print(f'Local atual: {agendamento['local']}')
-                        a = input('Qual o local novo?\nColoque "None" caso queira deixar vazio\n')
+                        a = input('Qual o local novo?\nColoque "None" caso queira deixar vazio\n\n--> ')
                         if a.upper()=='NONE':
                             a=None
                         agendamento['local'] = a
@@ -404,9 +401,9 @@ def act3() ->None:
                     elif editar=='5':
                         print(f'Tipo atual: {agendamento['assunto']}')
                         try:
-                            DD = int(input('Qual o dia do compromisso?\nEX: 17\n'))
-                            MM = int(input('Qual o mês do compromisso?\nEX: 11\n'))
-                            AAAA = int(input('Qual o ano do compromisso?\nEX: 2025\n'))
+                            DD = int(input('Qual o dia do compromisso?\nEX: 17\n\n--> '))
+                            MM = int(input('Qual o mês do compromisso?\nEX: 11\n\n--> '))
+                            AAAA = int(input('Qual o ano do compromisso?\nEX: 2025\n\n--> '))
 
 
                             if DD <= 9:
@@ -426,8 +423,8 @@ def act3() ->None:
                     elif editar=='6':
                         print(f'Horário antigo: {agendamento["horario"]}')
                         try:
-                            horas = int(input('Horas do compromisso?\nXX:MM\n'))
-                            min = int(input('Minutos do compromisso?\nHH:XX\n'))
+                            horas = int(input('Horas do compromisso?\nXX:MM\n\n--> '))
+                            min = int(input('Minutos do compromisso?\nHH:XX\n\n--> '))
                             if horas <= 9:
                                 horas = "0" + str(horas)
                             if min <= 9:
@@ -443,7 +440,7 @@ def act3() ->None:
 
                     elif editar=='7':
                         print(f'Ocorrência atual: {agendamento['ocorreu']}')
-                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n')
+                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n\n--> ')
                         if a == '1':
                             agendamento['ocorreu'] = False
                         elif a == '2':
@@ -464,12 +461,11 @@ def act3() ->None:
 
             elif categ=='pessoais':
                 while True:
-                    print(antigo)
                     print(f'Categoria: {categ}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
                     editar = input('\nQue informação você quer editar?\n1-Tipo\n2-Assunto\n3-Link\n4-Local\n5-Data\n6-Horario\n7-Ocorrência\n\nSe quer parar de editar, tecle "SAIR" e dê enter')
                     if editar=='1':
                         print(f'Tipo atual: {agendamento['tipo']}')
-                        a = input('Qual o tipo novo?\n1-Online\n2-Presencial\n')
+                        a = input('Qual o tipo novo?\n1-Online\n2-Presencial\n\n--> ')
                         if a=='1':
                             agendamento['tipo'] = 'online'
                         elif a=='2':
@@ -481,7 +477,7 @@ def act3() ->None:
 
                     elif editar=='2':
                         print(f'Assunto atual: {agendamento['assunto']}')
-                        a = input('Qual o novo assunto?')
+                        a = input('Qual o novo assunto?\n--> ')
                         agendamento['assunto'] = a
                         if not agendamento['tipo'] == antigo['tipo']:
                             agendamento['ultima_edicao']['ultimo_item_modificado']="Assunto"
@@ -489,7 +485,7 @@ def act3() ->None:
                             print('Nada foi editado')
                     elif editar=='3':
                         print(f'Link atual: {agendamento['link']}')
-                        a = input('Qual o novo link?\n(Coloque "None" no caso queira deixar vazio\n)')
+                        a = input('Qual o novo link?\n(Coloque "None" no caso queira deixar vazio)\n--> ')
                         if a.upper()=='NONE':
                             a=None
                         agendamento['link'] = a
@@ -499,7 +495,7 @@ def act3() ->None:
                             print('Nada foi editado')
                     elif editar=='4':
                         print(f'Local atual: {agendamento['local']}')
-                        a = input('Qual o local novo?\nColoque "None" caso queira deixar vazio\n')
+                        a = input('Qual o local novo?\nColoque "None" caso queira deixar vazio\n\n--> ')
                         if a.upper()=='NONE':
                             a=None
                         agendamento['local'] = a
@@ -510,9 +506,9 @@ def act3() ->None:
                     elif editar=='5':
                         print(f'Tipo atual: {agendamento['assunto']}')
                         try:
-                            DD = int(input('Qual o dia do compromisso?\nEX: 17\n'))
-                            MM = int(input('Qual o mês do compromisso?\nEX: 11\n'))
-                            AAAA = int(input('Qual o ano do compromisso?\nEX: 2025\n'))
+                            DD = int(input('Qual o dia do compromisso?\nEX: 17\n\n--> '))
+                            MM = int(input('Qual o mês do compromisso?\nEX: 11\n\n--> '))
+                            AAAA = int(input('Qual o ano do compromisso?\nEX: 2025\n\n--> '))
 
 
                             if DD <= 9:
@@ -532,8 +528,8 @@ def act3() ->None:
                     elif editar=='6':
                         print(f'Horário antigo: {agendamento["horario"]}')
                         try:
-                            horas = int(input('Horas do compromisso?\nXX:MM\n'))
-                            min = int(input('Minutos do compromisso?\nHH:XX\n'))
+                            horas = int(input('Horas do compromisso?\nXX:MM\n\n--> '))
+                            min = int(input('Minutos do compromisso?\nHH:XX\n\n--> '))
                             if horas <= 9:
                                 horas = "0" + str(horas)
                             if min <= 9:
@@ -549,7 +545,7 @@ def act3() ->None:
 
                     elif editar=='7':
                         print(f'Ocorrência atual: {agendamento['ocorreu']}')
-                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n')
+                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n\n--> ')
                         if a == '1':
                             agendamento['ocorreu'] = False
                         elif a == '2':
@@ -571,11 +567,11 @@ def act3() ->None:
             elif categ=='tarefas':
                 while True:
                     print(f'Categoria: {categ}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
-                    editar = input('Que informa~]ap deseja editar?\n1-Tarefa\n2-Observações\n3-Objetivo atual\n4-Deadline\n5-Horário\n6-Ocorrência\nDigite "SAIR" para parar de editar\n')
+                    editar = input('Que informa~]ap deseja editar?\n1-Tarefa\n2-Observações\n3-Objetivo atual\n4-Deadline\n5-Horário\n6-Ocorrência\nDigite "SAIR" para parar de editar\n\n--> ')
 
                     if editar=='1':
                         print(f'Tarefa atual: {agendamento["tarefa"]}')
-                        a = input('Qual o nome da nova tarefa?\n')
+                        a = input('Qual o nome da nova tarefa?\n\n--> ')
                         agendamento['tarefa'] = a
                         if not agendamento['tarefa'] == antigo['tarefa']:
                             agendamento['ultima_edicao']['ultimo_item_modificado'] = "Tarefa"
@@ -585,7 +581,7 @@ def act3() ->None:
 
                     elif editar=='2':
                         print(f'Observações atuais: {agendamento["observacoes"]}')
-                        a = input('Quais são as novas observações?\n(Coloque "None" caso queira deixar vazio)\n')
+                        a = input('Quais são as novas observações?\n(Coloque "None" caso queira deixar vazio)\n\n--> ')
                         if a.upper()=='NONE':
                             a=None
                         agendamento['observacoes'] = a
@@ -597,7 +593,7 @@ def act3() ->None:
 
                     elif editar=='3':
                         print(f'Objetivo atual: {agendamento["objetivo_atual"]}')
-                        a = input('Qual é o novo objetivo?\n')
+                        a = input('Qual é o novo objetivo?\n\n--> ')
                         if not agendamento['objetivo_atual'] == antigo['objetivo_atual']:
                             agendamento['ultima_edicao']['ultimo_item_modificado'] = "Objetivos"
                         else:
@@ -607,9 +603,9 @@ def act3() ->None:
                     elif editar=='4':
                         print(f'Deadline atual: {agendamento["deadline"]}')
                         try:
-                            DD = int(input('Qual o dia limite da tarefa?\nEX: 17\n'))
-                            MM = int(input('Qual o mês limite da tarefa?\nEX: 11\n'))
-                            AAAA = int(input('Qual o ano limite da tarefa?\nEX: 2025\n'))
+                            DD = int(input('Qual o dia limite da tarefa?\nEX: 17\n\n--> '))
+                            MM = int(input('Qual o mês limite da tarefa?\nEX: 11\n\n--> '))
+                            AAAA = int(input('Qual o ano limite da tarefa?\nEX: 2025\n\n--> '))
 
                             if DD <= 9:
                                 DD = "0" + str(DD)
@@ -629,8 +625,8 @@ def act3() ->None:
                     elif editar=='5':
                         print(f'Horário antigo: {agendamento["horario"]}')
                         try:
-                            horas = int(input('Horas limite?\nXX:MM\n'))
-                            min = int(input('Minutos limite?\nHH:XX\n'))
+                            horas = int(input('Horas limite?\nXX:MM\n\n--> '))
+                            min = int(input('Minutos limite?\nHH:XX\n\n--> '))
                             if horas <= 9:
                                 horas = "0" + str(horas)
                             if min <= 9:
@@ -647,7 +643,7 @@ def act3() ->None:
 
                     elif editar=='6':
                         print(f'Ocorrência atual: {agendamento['ocorreu']}')
-                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n')
+                        a = input('Qual a nova ocorrência?\n1-Falso\n2-Verdadeiro\n\n--> ')
                         if a == '1':
                             agendamento['ocorreu'] = False
                         elif a == '2':
@@ -691,7 +687,7 @@ def act4() ->None:
     exists = False
 
     try:
-        categ = int(input('Qual é a categoria que deseja ver?\n1 - Reunioes\n2 - Pessoal\n3 - Tarefas\n'))
+        categ = int(input('Qual é a categoria que deseja ver?\n1 - Reunioes\n2 - Pessoal\n3 - Tarefas\n\n--> '))
 
         if categ==1:
             categ = 'reunioes'
@@ -701,7 +697,7 @@ def act4() ->None:
             categ = 'tarefas'
         else:
             print('Não temos essa opção')
-        escolha = input('Você deseja ver apenas um compromisso em específico ou todos dessa categoria?\n1-Todos\n2-Um em específico\n')
+        escolha = input('Você deseja ver apenas um compromisso em específico ou todos dessa categoria?\n1-Todos\n2-Um em específico\n\n--> ')
 
         if escolha=='1':
             print('###########################################')
@@ -717,7 +713,7 @@ def act4() ->None:
 
 
         elif escolha=='2':
-            id = int(input('Qual é o ID do compromisso que deseja ver\n'))
+            id = int(input('Qual é o ID do compromisso que deseja ver\n\n--> '))
             if categ in dicto['compromissos']:
                 for i in dicto['compromissos'][categ]:
                     if i['id'] == str(id):
@@ -728,7 +724,7 @@ def act4() ->None:
                     print('Esse agendamento não existe, tem certeza que ele está na categoria correta? Ou se ele ao menos existe?')
                 else:
                     if categ=='reunioes' or categ=='pessoais':
-                        a = input(
+                        print(
                             f'Categoria: {categ}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nOcorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
                     elif categ == 'tarefas':
                         print(
@@ -760,34 +756,56 @@ def act5() ->None:
     Também salva algumas vagas se o user quiser
     :return:
     """
-    # res = get2()
-    # if res.status_code == 200:
-    #     print('API acessada!')
-    dicto = get3().json()
-    salvar = []
-    contador = 0
-    for i in dicto:
-        contador += 1
-        print(f'Número: {contador}\nQuando foi postado: {str(i['date_posted'])[:10]}\nVaga: {i['title']}\nValidade: {str(i['date_validthrough'])[:10]}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
-    print('Caso queira mais detalhes, tente entra nos links do linkedin da empresa ou no link da vaga.')
-    while True:
-        try: #date_valid
-            a = int(input('Deseja arquivar uma vaga?\nSe sim, dê coloque o número da empresa (o que fica em bem no inicio das informações sobre a empre e dê enter)\n\n----Caso não, digite "9999" para sair.\n-> '))
-            if a == 9999:
-                break
-            elif contador >= a >= 1:
-                a=a-1
-                salvar.append(dicto[a])
+    res = get2()
+    if res.status_code == 200:
+        print('API acessada!')
+        dicto = res.json()
+        acesso = True
 
-                print('Item salvo!\n')
-                print(f'Aqui está o ID da vaga: {dicto[a]["id"]}\n')
-            else:
-                print(f'Esse valor não está dentro da quantidade de vagas que são {contador}.')
-        except ValueError:
-            print('Número inteiros apenas, por favor')
-    if not salvar==[]:
-        with open('empresas.json', 'w') as f:
-            json.dump(salvar, f, indent=3)
+    else:
+        if res.status_code == 404:
+            erro = 'Endereço da não encontrado'
+        elif res.status_code == 500:
+            erro = 'Erro dentro do servidor'
+        else:
+            erro = 'Ocorre algum erro ao requisitar a API'
+
+        acesso = input(f'Erro: {erro}\nGostaria de usar uma falsa no lugar enquanto ela está fora do ar?\nSe sim, digite "Sim"\n--> ')
+        if acesso.upper() == 'SIM':
+            dicto = get3().json()
+            acesso= True
+    # acesso = True
+    # dicto = get3().json()
+    if acesso:
+        vagasantes = getvagas()
+        salvar = getvagas()
+        contador = 0
+        for i in dicto:
+            contador += 1
+            print(f'Número: {contador}\nQuando foi postado: {str(i['date_posted'])[:10]}\nVaga: {i['title']}\nValidade: {str(i['date_validthrough'])[:10]}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
+        print('Caso queira mais detalhes, tente entra nos links do linkedin da empresa ou no link da vaga.')
+        while True:
+            try: #date_valid
+                a = int(input('Deseja arquivar uma vaga?\nSe sim, dê coloque o número da empresa (o que fica em bem no inicio das informações sobre a empre e dê enter)\n\n----Caso não, digite "9999" para sair.\n--> '))
+                if a == 9999:
+                    break
+                elif contador >= a >= 1:
+                    a=a-1
+                    salvar.append(dicto[a])
+
+                    print('Item salvo!\n')
+                    print(f'Aqui está o ID da vaga: {dicto[a]["id"]}\n')
+                else:
+                    print(f'Esse valor não está dentro da quantidade de vagas que são {contador}.')
+            except ValueError:
+                print('Número inteiros apenas, por favor')
+        if not salvar==vagasantes:
+
+            with open('empresas.json', 'w') as f:
+                json.dump(salvar, f, indent=3)
+            print('Itens salvo!\n')
+    else:
+        print('Operação cancelada.\n')
     volta() #
 
 def act6() ->None:
@@ -798,10 +816,10 @@ def act6() ->None:
     :return:
     """
     dicto = getvagas()
-    veri = input('Se deseja ver todas as empresas, apenas der enter\nCaso queira ver apenas uma, punxando-a pelo ID, digite "PUXAR".')
+    veri = input('Se deseja ver todas as empresas, apenas der enter\nCaso queira ver apenas uma, punxando-a pelo ID, digite "PUXAR".\n--> ')
     if veri.upper()=='PUXAR':
         exists = False
-        iden = input('Qual é o ID da vaga?\n')
+        iden = input('Qual é o ID da vaga?\n\n--> ')
         for i in dicto:
             if i['id'] == iden:
                 exists = True
@@ -822,7 +840,7 @@ def act6() ->None:
 def act7() ->None:
     dicto = getvagas()
     exists = False
-    iden = input('Qual é o ID da vaga?\n')
+    iden = input('Qual é o ID da vaga?\n\n--> ')
     for i in dicto:
         if i['id'] == iden:
             exists = True
@@ -831,7 +849,7 @@ def act7() ->None:
         print('Esse ID não está catalogado\nTem certeza que é o ID correto ou se ele ao menos existe?\n')
     else:
         print(f'Quando foi postado: {vaga['date_posted']}\nVaga: {vaga['title']}\nValidade: {vaga['date_validthrough']}\nEmpresa: {vaga['organization']}\nLink da empresa: {vaga['organization_url']}\nTipos de vaga: {vaga['employment_type']}\nLink da vaga: {vaga['url']}\nSenioridade: {vaga['seniority']}\nEspecialidades da empresa: {vaga['linkedin_org_specialties']}\nSlogan da empresa: {vaga['linkedin_org_slogan']}\n')
-        deleta = input('VocÊ tem certeza que quer deletar essa vaga?\nSe sim, digite "DELETAR".\n')
+        deleta = input('VocÊ tem certeza que quer deletar essa vaga?\nSe sim, digite "DELETAR".\n\n--> ')
         if deleta.upper() == 'DELETAR':
             dicto.remove(vaga)
             print('Vaga deletada com sucesso!')
@@ -847,9 +865,9 @@ def verificar() ->None:
     Função utilizada para verificar
     os compromissos com data limite
     para o dia atual
-    :return: 
+    :return:
     """
-    
+
     dicto = get1()
     hojerp=[]
     hojet=[]
@@ -890,7 +908,7 @@ def verificar() ->None:
 
 def main() ->None:
     while True:
-        print("\n/////////////////////////////////////////////////////////////")
+        print("\n\n/////////////////////////////////////////////////////////////")
         print('1 - Compromissos e tarefas para HOJE')
         print('2 - Agendamento ')
         print('3 - Excluir agendamentos')
