@@ -15,7 +15,7 @@ def volta()->None:
     "print('Voltando')" em toda função
     :return:
     """
-    a = input('Dê enter para voltar ao menu principal\n')
+    a = input('\n\nDê enter para voltar ao menu principal\n\n')
 
 def get1()->dict:
     if os.path.exists('compr.json'):
@@ -89,7 +89,7 @@ def act1() ->None:
     """
     dicto = get1()
     try:
-        categ = int(input('De que categoria o seu agendamento é?\n1-Reunião\n2-Pessoal\n3-Tarefa\nCaso nenhuma, apenas tecle qualquer coisa\n'))
+        categ = int(input('De que categoria o seu agendamento é?\n1-Reunião\n2-Pessoal\n3-Tarefa\nCaso nenhuma, apenas tecle qualquer coisa\n--> '))
     except ValueError:
         categ = 0
         print('Erro na escolha de categoria\nEscolha apenas números INTEIROS\nCaso o erro persista, tente contato com a nossa empresa\n')
@@ -111,23 +111,22 @@ def act1() ->None:
             print("Erro: Você colocou algum valor não inteiro\nPor isso o tipo, link e local serão considerados nulos\nArrume isso depois na opção 3 dos agendamentos\n")
         if tipo == 1:
             tipo = "online"
-            link = input('Cole aqui o link da reunião: ')
+            link = input('Cole aqui o link do compromisso: ')
             local = None
         elif tipo == 2:
             tipo = "presencial"
             link = None
-            local = input("Cole aqui o endereço do local da reunião: ")
+            local = input("Cole aqui o endereço do local do compromisso: ")
         else:
             print('Você colocou algum valor que está fora das opções\nAssim valores como tipo, link e local serão nulos\nArrume-os depois na opção 3')
             tipo = None
             link = None
             local = None
-        assunto = input('Qual é o assunto da reunião?')
+        assunto = input('Qual é o assunto do compromisso?\n--> ')
         try:
-            corrigir = False
-            DD = int(input('Qual o dia da reunião?\nEX: 17\n\n--> '))
-            MM = int(input('Qual o mês da reuniao?\nEX: 11\n--> '))
-            AAAA = int(input('Qual é o ano da reuniao?\nEX: 2025\n\n--> '))
+            DD = int(input('Qual o dia do compromisso?\nEX: 17\n\n--> '))
+            MM = int(input('Qual o mês do compromisso?\nEX: 11\n--> '))
+            AAAA = int(input('Qual é o ano do compromisso?\nEX: 2025\n\n--> '))
             horas = int(input('Qual é a hora da ruenião?\nXX:MM\n\n--> '))
             min = int(input('Quais são os minutos da reunião?\nHH:XX\n\n--> '))
 
@@ -708,7 +707,7 @@ def act4() ->None:
                         f'ID: {agendamento['id']}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nOcorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
             if categ=='tarefas':
                 for agendamento in dicto['compromissos'][categ]:
-                    print(f'Categoria: {categ}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
+                    print(f'ID: {agendamento['id']}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
 
 
 
@@ -725,12 +724,12 @@ def act4() ->None:
                 else:
                     if categ=='reunioes' or categ=='pessoais':
                         print(
-                            f'Categoria: {categ}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nOcorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
+                            f'id: {agendamento['id']}\nCategoria: {categ}\nTipo: {agendamento['tipo']}\nAssunto: {agendamento['assunto']}\nLink: {agendamento['link']}\nLocal: {agendamento['local']}\nData: {agendamento['data']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nOcorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
                     elif categ == 'tarefas':
                         print(
-                            f'Categoria: {categ}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
+                            f'ID: {agendamento['id']}\nTarefa: {agendamento['tarefa']}\nObservacoes: {agendamento['observacoes']}\nObjetivo atual: {agendamento['objetivo_atual']}\nDeadline: {agendamento['deadline']}\nHorario: {agendamento['horario']}\nDia de criação: {agendamento['dia_de_criacao']}\nSe Ocorreu: {agendamento['ocorreu']}\nUltima edição: {agendamento['ultima_edicao']['dia']}\nUltimo item editado: {agendamento['ultima_edicao']['ultimo_item_modificado']}\n\n')
         else:
-            print('Essa opção mão existe')
+            print('Essa opção não existe')
 
     except ValueError:
         print('Números inteiros apenas') # Try na função inteira já que ela só recebe 2 valores os quais precisam ser inteiros
@@ -780,6 +779,7 @@ def act5() ->None:
         vagasantes = getvagas()
         salvar = getvagas()
         contador = 0
+        print('\n\n\n')
         for i in dicto:
             contador += 1
             print(f'Número: {contador}\nQuando foi postado: {str(i['date_posted'])[:10]}\nVaga: {i['title']}\nValidade: {str(i['date_validthrough'])[:10]}\nEmpresa: {i['organization']}\nLink da empresa: {i['organization_url']}\nTipos de vaga: {i['employment_type']}\nLink da vaga: {i['url']}\nSenioridade: {i['seniority']}\nEspecialidades da empresa: {i['linkedin_org_specialties']}\nSlogan da empresa: {i['linkedin_org_slogan']}\n')
@@ -875,7 +875,7 @@ def verificar() ->None:
 
     if os.path.exists('compr.json'):
         if not dicto['compromissos']['reunioes']==[]:
-            for i in dicto['compromissos']['pessoais'] and dicto['compromissos']['reunioes']:
+            for i in dicto['compromissos']['reunioes']:
                 if i['data']==str(date.today()):
                     hojerp.append(i)
 
@@ -889,7 +889,7 @@ def verificar() ->None:
                 if i['deadline']==str(date.today()):
                     hojet.append(i)
 
-    print('Compromissos para hoje:\n')
+    print('\n\nCompromissos para hoje:\n')
     if not hojerp==[]:
         for i in hojerp:
             print(f'Tipo: {i['tipo']}\nAssunto: {i['assunto']}\nLink: {i['link']}\nLocal: {i['local']}\nData: {i['data']}\nHorario: {i['horario']}\n\n')
@@ -918,7 +918,7 @@ def main() ->None:
         print('7 - Ver vagas salvas')
         print('8 - Excluir vagas salvas') #OBS: Eu não criei um "Editar vaga salva" pois é desnecessário editar as informações e vagas
         print('9 - Sair')
-        a = input('O que deseja fazer?\n')
+        a = input('O que deseja fazer?\n\n--> ')
         if a =='1':
             verificar()
         elif a =='2':
